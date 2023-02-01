@@ -1,3 +1,4 @@
+import pandas as pd
 import gspread
 from google.oauth2.service_account import Credentials
 
@@ -14,6 +15,11 @@ SHEET = GSPREAD_CLIENT.open("house_food_stack")
 
 stack = SHEET.worksheet("stack")
 
-df = stack.get_all_values()
+stack_list = stack.get_all_values()
+
+
+df = pd.DataFrame (stack_list)
 
 print(df)
+
+
