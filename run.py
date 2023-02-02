@@ -42,15 +42,22 @@ col_list = dataframe["Used per week"].values.tolist()
 
 def input_used_per_week():
     """
-    This function should input the numbers to the terminal,
+    This function should input the numbers to the terminal.
+    Contains the validation funtion in a while loop
     """
-    print('Please use the table printed in the terminal to fill the 22 rows, with a comma after the numberr. By not so, it will come with an error.')
-    print('Please have the terminal as max with as possible because it will print all the table.')
-    print('The input is below the table')
-    print(dataframe)
-    data_per_week = input('Enter your numbers here:\n')
-    data_per_week_list = data_per_week.split(",")
-    validate_input(data_per_week_list)
+    while True:
+        print('Please use the table printed in the terminal to fill the 22 rows, with a comma after the numberr. By not so, it will come with an error.')
+        print('Please have the terminal as max with as possible because it will print all the table.')
+        print('The input is below the table')
+        print(dataframe)
+        data_per_week = input('Enter your numbers here:\n')
+        data_per_week_list = data_per_week.split(",")
+        if validate_input(data_per_week_list):
+            print("break")
+            print(data_per_week_list)
+            break
+    return data_per_week_list
+
 
 
 def validate_input(data):
@@ -58,6 +65,7 @@ def validate_input(data):
     Function to validate input. Input given  can not be strings or less or more values than 22.
     """
     try:
+        [int(num) for num in data]
         if len(data) != 22:
             if data == 'string':
                 raise ValueError(
@@ -66,8 +74,10 @@ def validate_input(data):
                 f'Exactly 22 numbers requiered, you provided {len(data)} '
             )
     except ValueError as e:
-        print(
-            f'Other than number, other valus is not permited. Your data is {e}\n')
+        print(f'Other than number, other valus is not permited. Your data is {e}\n')
+        return False
+    return True
+        
 
 
-input_used_per_week()
+input_num = input_used_per_week()
