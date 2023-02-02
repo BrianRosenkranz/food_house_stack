@@ -42,8 +42,9 @@ col_list = dataframe["Used per week"].values.tolist()
 
 def input_used_per_week():
     """
+    While loop for the user until the input data is correct
     This function should input the numbers to the terminal.
-    Contains the validation funtion in a while loop
+    Contains the validation funtion.
     """
     while True:
         print('Please use the table printed in the terminal to fill the 22 rows, with a comma after the numberr. By not so, it will come with an error.')
@@ -53,8 +54,6 @@ def input_used_per_week():
         data_per_week = input('Enter your numbers here:\n')
         data_per_week_list = data_per_week.split(",")
         if validate_input(data_per_week_list):
-            print("break")
-            print(data_per_week_list)
             break
     return data_per_week_list
 
@@ -79,5 +78,28 @@ def validate_input(data):
     return True
         
 
+def update_sheet(data,cell_target,sheet):
+    """
+    Function to convert our used per week in to list
+    Change the empy list with the inputed numbers
+    """
+    print('updating sheet...\n')
+    cell_list = sheet.range(cell_target)
+    cell_values = data # replace this with a list of 22 values
+
+    for i, val in enumerate(cell_values):  #gives us a tuple of an index and value
+        cell_list[i].value = val    #use the index on cell_list and the val from cell_values
+
+    stack.update_cells(cell_list)
+    print('sheet updated successfully')
+
 
 input_num = input_used_per_week()
+stack_numbers=[int(numbers) for numbers in input_num]
+col_list.clear()
+col_list=[]
+col_list.append(stack_numbers)
+for x in col_list:
+    new_numbers=x
+
+update_sheet(new_numbers, 'J2:J23',stack)
