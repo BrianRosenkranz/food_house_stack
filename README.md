@@ -29,3 +29,10 @@ The deployment terminal is set to 80 columns by 24 rows. That means that each li
 
 -----
 Happy coding!
+
+
+
+
+bugs
+1) The values from my csv file came empty. Solution create a new csv file and new repository.
+2) Pandas came with the wrong values because it function. Solution was the atrributre together wiht gspread. pd.dataframe(value.gett all records)** corregir aca

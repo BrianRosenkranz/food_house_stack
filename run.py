@@ -32,6 +32,23 @@ df_consume = pd.DataFrame(consume_list)
 df_remain = pd.DataFrame(remain_list)
 df_budget = pd.DataFrame(budget_list)
 
-print(df_budget)
 
 
+
+dataframe = pd.DataFrame(stack.get_all_records())
+
+
+def input_used_per_week():
+    """
+    This function should input the numbers to the terminal,
+    """
+    print('Please use the table printed in the terminal to fill the 22 rows. By not so, it will come with an error.')
+    print('Please have the terminal as max with as possible because it will print all the table.')
+    print('The input is below the table')
+    print(dataframe)
+    data_per_week= input('Enter your numbers here:\n')
+    print(f'The information provided is: {data_per_week}')
+
+    
+
+input_used_per_week()
