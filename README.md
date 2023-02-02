@@ -36,3 +36,4 @@ Happy coding!
 bugs
 1) The values from my csv file came empty. Solution create a new csv file and new repository.
 2) Pandas came with the wrong values because it function. Solution was the atrributre together wiht gspread. pd.dataframe(value.gett all records)** corregir aca
+3)The numbers from the data frame must be a list. to list and also the one from the input.
