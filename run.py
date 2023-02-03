@@ -128,8 +128,9 @@ def collect_update_remain_sheet(column_numbers):
     Positive numbers indicates there is still food stack
     Negative numbers indicates storage is empty and extra was bought during the week.
     """
-    col_list_content = dataframe_content["Content"].values.tolist()# numbers to mult
+    # numbers to mult
     col_list_storage = dataframe_stack["Amount in storage"].values.tolist()# numbers to subtract
+    col_list_content = dataframe_content["Content"].values.tolist()
     remain_numbers=[]
     mult_content=[]
     for used, content in zip(column_numbers, col_list_content):
@@ -140,26 +141,58 @@ def collect_update_remain_sheet(column_numbers):
         remain_numbers.append(subtraction)
     return remain_numbers
 
-def estimate_budget():
+def change_int_to_float():
+    """
+    All the numbers coming from the list of price is an int64.
+    We need to convert to float and then divided by 10.
+    For the estimate_budget function to work.
+    """
+
+    col_list_price = dataframe_stack["Price €"].values.tolist()
+    #print(dataframe_stack["Price €"].dtype)
+    dataframe_stack["Price €"]=dataframe_stack["Price €"].astype("float")
+    quotients = []
+    for number in col_list_price:
+        quotients.append(number / 10)
+    return quotients
+
+def estimate_budget(column_numbers):
     """
     Function to estimate budget.
     """
-    col_list_price = dataframe_stack["Price €"].values.tolist()# numbers to subtract
-    print(col_list_price)
+    float_num = change_int_to_float()
+    col_list_content = dataframe_content["Content"].values.tolist()
+    col_list_portion = dataframe_stack["Portions"].values.tolist()
+    budget_numbers = []
+    mult_num = []
+    price_num = []
+    for used, portion in zip(column_numbers, col_list_portion):
+        multiplication= used  * portion
+        mult_num.append(multiplication)
+    for price, mult in zip(float_num, mult_num):
+        mult= price * mult
+        price_num.append(mult)
+    for content, division in zip(col_list_content, price_num):
+        div= division / content
+        budget_numbers.append(div)
+    return budget_numbers
 
 def main():
     """
-    This function will take all the function and starz the programm,
+    This function will take all the function and start the programm,
     """
     input_num = input_used_per_week()
     used_week_numbers = transform_numbers_and_clear(input_num, col_list_stack)
     remain_num = collect_update_remain_sheet(used_week_numbers)
+    budget_numbers=estimate_budget(used_week_numbers)
     update_sheet(used_week_numbers, 'J2:J23',stack)
     update_sheet(remain_num,'G2:G23',remain)
-    update_sheet(transform_numbers_and_clear(input_num, col_list_stack),'I2:I23',budget)
+    update_sheet(budget_numbers,'J2:J23',budget)
 
 print('Welcome to the house food stack app\n')
-print(dataframe_stack["Price €"].dtype)
-dataframe_stack["Price €"]=dataframe_stack["Price €"].astype("float")
-print(dataframe_stack["Price €"].dtype)
-estimate_budget()
+
+main()
+
+
+
+

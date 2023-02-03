@@ -39,3 +39,4 @@ bugs
 3)The numbers from the data frame must be a list. to list and also the one from the input.
 4) list inside a list after retrieving the numbers in the input and appending it to list from the sheet. sol: for in iterate. and update the columns
 5)Just updated stack, not all of them. Function to update all when called
+6) for the estimate budget the number from stock sheet was retrieve as int and when converted to float, it was just adding a ,0. The solution was changing the google sheet formats and divided wiht python by 10.
