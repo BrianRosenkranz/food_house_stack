@@ -107,6 +107,7 @@ def transform_numbers_and_clear(value, col_list):
     """
     This function is to get all numbers from the list, erase there values
     and change it wiht the new input values, if needed.
+    The reason for this is because data from the sheet came as an empty list of strings.
     For purpose of the project, is created to show the knowledge adquiered but you dont need it,
     because the update function will erase the data and store the new one.
     """
@@ -127,12 +128,8 @@ def collect_update_remain_sheet(column_numbers):
     Positive numbers indicates there is still food stack
     Negative numbers indicates storage is empty and extra was bought during the week.
     """
-    col_list_content = dataframe_content["Content"].values.tolist()# numbers to subtract
+    col_list_content = dataframe_content["Content"].values.tolist()# numbers to mult
     col_list_storage = dataframe_stack["Amount in storage"].values.tolist()# numbers to subtract
-    col_list_remain = dataframe_remain["Amount remain"].values.tolist() #Put this in the function transform numbers and clear it
-    print(col_list_remain) # put in the transform
-    print(' ')
-    print(f'Amount storage:{col_list_storage} used per week:{column_numbers} content numbers:{col_list_content}')
     remain_numbers=[]
     mult_content=[]
     for used, content in zip(column_numbers, col_list_content):
@@ -143,6 +140,12 @@ def collect_update_remain_sheet(column_numbers):
         remain_numbers.append(subtraction)
     return remain_numbers
 
+def estimate_budget():
+    """
+    Function to estimate budget.
+    """
+    col_list_price = dataframe_stack["Price €"].values.tolist()# numbers to subtract
+    print(col_list_price)
 
 def main():
     """
@@ -156,4 +159,7 @@ def main():
     update_sheet(transform_numbers_and_clear(input_num, col_list_stack),'I2:I23',budget)
 
 print('Welcome to the house food stack app\n')
-main()
+print(dataframe_stack["Price €"].dtype)
+dataframe_stack["Price €"]=dataframe_stack["Price €"].astype("float")
+print(dataframe_stack["Price €"].dtype)
+estimate_budget()
