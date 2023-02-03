@@ -27,11 +27,8 @@ col_list_stack = dataframe_stack["Used per week"].values.tolist()
 
 # variables i am goin to need for amount_remain_update
 dataframe_content = pd.DataFrame(stack.get_all_records())
-col_list_content = dataframe_content["Content"].values.tolist()# numbers to subtract
 dataframe_storage = pd.DataFrame(stack.get_all_records())
-col_list_storage = dataframe_stack["Amount in storage"].values.tolist()# numbers to subtract
 dataframe_remain = pd.DataFrame(remain.get_all_records())
-col_list_remain = dataframe_remain["Amount remain"].values.tolist() #Put this in the function transform numbers and clear it
 
 
 # get the values from the worksheet variables.
@@ -121,21 +118,42 @@ def transform_numbers_and_clear(value, col_list):
         new_numbers=x
     return new_numbers
 
-def collect_update_remain_sheet():
+
+
+def collect_update_remain_sheet(column_numbers):
     """
     This function will collect, do mathematical ecuation
     and return the number to place in Amount remain cell in the remain sheet.
+    Positive numbers indicates there is still food stack
+    Negative numbers indicates storage is empty and extra was bought during the week.
     """
-    print('Remain function created')
+    col_list_content = dataframe_content["Content"].values.tolist()# numbers to subtract
+    col_list_storage = dataframe_stack["Amount in storage"].values.tolist()# numbers to subtract
+    col_list_remain = dataframe_remain["Amount remain"].values.tolist() #Put this in the function transform numbers and clear it
+    print(col_list_remain) # put in the transform
+    print(' ')
+    print(f'Amount storage:{col_list_storage} used per week:{column_numbers} content numbers:{col_list_content}')
+    remain_numbers=[]
+    mult_content=[]
+    for used, content in zip(column_numbers, col_list_content):
+        multiplication= used  * content
+        mult_content.append(multiplication)
+    for storage, mult in zip(col_list_storage, mult_content):
+        subtraction= storage - mult
+        remain_numbers.append(subtraction)
+    return remain_numbers
 
 
 def main():
     """
-    This function will take all the function and star the programm,
+    This function will take all the function and starz the programm,
     """
-    input_num = input_used_per_week()# numbers to mult content
-    update_sheet(transform_numbers_and_clear(input_num, col_list_stack), 'J2:J23',stack)
-    update_sheet(transform_numbers_and_clear(input_num, col_list_stack), 'G2:G23',remain)
-    update_sheet(transform_numbers_and_clear(input_num, col_list_stack), 'I2:I23',budget)
+    input_num = input_used_per_week()
+    used_week_numbers = transform_numbers_and_clear(input_num, col_list_stack)
+    remain_num = collect_update_remain_sheet(used_week_numbers)
+    update_sheet(used_week_numbers, 'J2:J23',stack)
+    update_sheet(remain_num,'G2:G23',remain)
+    update_sheet(transform_numbers_and_clear(input_num, col_list_stack),'I2:I23',budget)
 
-collect_update_remain_sheet()
+print('Welcome to the house food stack app\n')
+main()
