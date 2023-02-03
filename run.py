@@ -35,8 +35,7 @@ df_budget = pd.DataFrame(budget_list)
 
 # variables i am goin to need later on
 
-dataframe = pd.DataFrame(stack.get_all_records())
-col_list = dataframe["Used per week"].values.tolist()
+
 # variables i am goin to need later on
 
 
@@ -50,7 +49,7 @@ def input_used_per_week():
         print('Please use the table printed in the terminal to fill the 22 rows, with a comma after the numberr. By not so, it will come with an error.')
         print('Please have the terminal as max with as possible because it will print all the table.')
         print('The input is below the table')
-        print(dataframe)
+        print(dataframe_stack)
         data_per_week = input('Enter your numbers here:\n')
         data_per_week_list = data_per_week.split(",")
         if validate_input(data_per_week_list):
@@ -82,24 +81,33 @@ def update_sheet(data,cell_target,sheet):
     """
     Function to convert our used per week in to list
     Change the empy list with the inputed numbers
+    This will always update the sheet, erase the old numbers.
     """
-    print('updating sheet...\n')
+    print(f'updating {sheet}...\n')
     cell_list = sheet.range(cell_target)
     cell_values = data # replace this with a list of 22 values
 
     for i, val in enumerate(cell_values):  #gives us a tuple of an index and value
         cell_list[i].value = val    #use the index on cell_list and the val from cell_values
 
-    stack.update_cells(cell_list)
-    print('sheet updated successfully')
+    sheet.update_cells(cell_list)
+    print(f'{sheet} updated successfully\n')
+
+dataframe_stack = pd.DataFrame(stack.get_all_records())
+col_list_stack = dataframe_stack["Used per week"].values.tolist()
 
 
 input_num = input_used_per_week()
-stack_numbers=[int(numbers) for numbers in input_num]
-col_list.clear()
-col_list=[]
-col_list.append(stack_numbers)
-for x in col_list:
-    new_numbers=x
 
-update_sheet(new_numbers, 'J2:J23',stack)
+def transform_numbers(value, col_list):
+    numbers=[int(numbers) for numbers in value]
+    col_list.clear()
+    col_list=[]
+    col_list.append(numbers)
+    for x in col_list:
+        new_numbers=x
+    return new_numbers
+
+update_sheet(transform_numbers(input_num, col_list_stack), 'J2:J23',stack)
+update_sheet(transform_numbers(input_num, col_list_stack), 'G2:G23',remain)
+update_sheet(transform_numbers(input_num, col_list_stack), 'I2:I23',budget)
