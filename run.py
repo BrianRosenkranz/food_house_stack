@@ -20,23 +20,35 @@ stack = SHEET.worksheet("stack")
 consume = SHEET.worksheet("consume")
 remain = SHEET.worksheet("remain")
 budget = SHEET.worksheet("budget")
+
+# variables i am goin to need for input_used_per_week
+dataframe_stack = pd.DataFrame(stack.get_all_records())
+col_list_stack = dataframe_stack["Used per week"].values.tolist()
+
+# variables i am goin to need for amount_remain_update
+dataframe_content = pd.DataFrame(stack.get_all_records())
+col_list_content = dataframe_content["Content"].values.tolist()# numbers to subtract
+dataframe_storage = pd.DataFrame(stack.get_all_records())
+col_list_storage = dataframe_stack["Amount in storage"].values.tolist()# numbers to subtract
+dataframe_remain = pd.DataFrame(remain.get_all_records())
+col_list_remain = dataframe_remain["Amount remain"].values.tolist() #Put this in the function transform numbers and clear it
+
+
 # get the values from the worksheet variables.
+#create a function later on
 stack_list = stack.get_all_values()
 consume_list = consume.get_all_values()
 remain_list = remain.get_all_values()
 budget_list = budget.get_all_values()
 
 # the value worksheets in to dataframe with pandas
+#erase if no need at the end of the project
 df_stack = pd.DataFrame(stack_list)
 df_consume = pd.DataFrame(consume_list)
 df_remain = pd.DataFrame(remain_list)
 df_budget = pd.DataFrame(budget_list)
 
 
-# variables i am goin to need later on
-
-
-# variables i am goin to need later on
 
 
 def input_used_per_week():
@@ -93,13 +105,14 @@ def update_sheet(data,cell_target,sheet):
     sheet.update_cells(cell_list)
     print(f'{sheet} updated successfully\n')
 
-dataframe_stack = pd.DataFrame(stack.get_all_records())
-col_list_stack = dataframe_stack["Used per week"].values.tolist()
 
-
-input_num = input_used_per_week()
-
-def transform_numbers(value, col_list):
+def transform_numbers_and_clear(value, col_list):
+    """
+    This function is to get all numbers from the list, erase there values
+    and change it wiht the new input values, if needed.
+    For purpose of the project, is created to show the knowledge adquiered but you dont need it,
+    because the update function will erase the data and store the new one.
+    """
     numbers=[int(numbers) for numbers in value]
     col_list.clear()
     col_list=[]
@@ -108,6 +121,21 @@ def transform_numbers(value, col_list):
         new_numbers=x
     return new_numbers
 
-update_sheet(transform_numbers(input_num, col_list_stack), 'J2:J23',stack)
-update_sheet(transform_numbers(input_num, col_list_stack), 'G2:G23',remain)
-update_sheet(transform_numbers(input_num, col_list_stack), 'I2:I23',budget)
+def collect_update_remain_sheet():
+    """
+    This function will collect, do mathematical ecuation
+    and return the number to place in Amount remain cell in the remain sheet.
+    """
+    print('Remain function created')
+
+
+def main():
+    """
+    This function will take all the function and star the programm,
+    """
+    input_num = input_used_per_week()# numbers to mult content
+    update_sheet(transform_numbers_and_clear(input_num, col_list_stack), 'J2:J23',stack)
+    update_sheet(transform_numbers_and_clear(input_num, col_list_stack), 'G2:G23',remain)
+    update_sheet(transform_numbers_and_clear(input_num, col_list_stack), 'I2:I23',budget)
+
+collect_update_remain_sheet()
