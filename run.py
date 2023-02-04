@@ -49,7 +49,30 @@ df_budget = pd.DataFrame(budget_list)
 def welcome_app():
     print('Welcome to the house food stack app\n')
     start= input('Will you like to start?')
+    while True:
+        if start == 'yes':
+            input_used_per_week()
+        elif start =='no':
+            print('App finished\n')
+            welcome_app()
+            return False
+        else:
+            validate_start(start)
+            break
+    return start
 
+def validate_start(data):
+    """
+    Function to validate input. Input given  can not be strings or less or more values than 22.
+    """
+    try:
+        if data != 'yes':
+            raise ValueError(
+                f'You provided a false value, yes or no is required, you provided {data}')
+    except ValueError as e:
+        print(f'Other than number, other valus is not permited. Your data is {e}\n')
+        return False
+    return True
 
 def input_used_per_week():
     """
@@ -69,7 +92,6 @@ def input_used_per_week():
         if validate_input(data_per_week_list):
             break
     return data_per_week_list
-
 
 
 def validate_input(data):
@@ -195,6 +217,4 @@ def main():
     update_sheet(remain_num,'G2:G23',remain)
     update_sheet(budget_numbers,'J2:J23',budget)
 
-
-
-welcome_app()
+main()
