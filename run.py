@@ -46,6 +46,9 @@ df_remain = pd.DataFrame(remain_list)
 df_budget = pd.DataFrame(budget_list)
 
 
+def welcome_app():
+    print('Welcome to the house food stack app\n')
+    start= input('Will you like to start?')
 
 
 def input_used_per_week():
@@ -58,6 +61,8 @@ def input_used_per_week():
         print('Please use the table printed in the terminal to fill the 22 rows, with a comma after the numberr. By not so, it will come with an error.')
         print('Please have the terminal as max with as possible because it will print all the table.')
         print('The input is below the table')
+        print("For the purpose of the project, I'll leave an example")
+        print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45')
         print(dataframe_stack)
         data_per_week = input('Enter your numbers here:\n')
         data_per_week_list = data_per_week.split(",")
@@ -181,6 +186,7 @@ def main():
     """
     This function will take all the function and start the programm,
     """
+    welcome_app()
     input_num = input_used_per_week()
     used_week_numbers = transform_numbers_and_clear(input_num, col_list_stack)
     remain_num = collect_update_remain_sheet(used_week_numbers)
@@ -189,10 +195,6 @@ def main():
     update_sheet(remain_num,'G2:G23',remain)
     update_sheet(budget_numbers,'J2:J23',budget)
 
-print('Welcome to the house food stack app\n')
-
-main()
 
 
-
-
+welcome_app()
