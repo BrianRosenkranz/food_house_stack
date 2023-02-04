@@ -47,18 +47,29 @@ df_budget = pd.DataFrame(budget_list)
 
 
 def welcome_app():
+    """
+    This function will welcome the user.
+    Validate the data
+    Or exit the app
+    """
     print('Welcome to the house food stack app\n')
-    start= input('Will you like to start?')
+    print('The table will be printed in the terminal to fill the 22 rows, with a comma after the number. By not so, it will come with an error.')
+    print('Please have the terminal as max with as possible because it will print all the table.')
+    print('The input area will be below the table\n')
+    print("For the purpose of the project, I'll leave an example\n")
+    print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45\n')
+    start= input('Will you like to start?\n Only yes or no allowed\n')
     while True:
         if start == 'yes':
-            input_used_per_week()
+            main()
         elif start =='no':
             print('App finished\n')
-            welcome_app()
+            exit()
             return False
         else:
             validate_start(start)
-            break
+            print('Please try again...\n')
+            welcome_app()
     return start
 
 def validate_start(data):
@@ -68,11 +79,18 @@ def validate_start(data):
     try:
         if data != 'yes':
             raise ValueError(
-                f'You provided a false value, yes or no is required, you provided {data}')
+                f'you provided {data}')
     except ValueError as e:
-        print(f'Other than number, other valus is not permited. Your data is {e}\n')
+        print(f'Yes or no is required, other valus is not permited. You provided {data}.\n')
+        print('Please try again...\n')
+        welcome_app()
         return False
     return True
+
+def clear_cell(cell_target,sheet):
+    sheet.batch_clear([cell_target])
+    print('values clear...')
+    
 
 def input_used_per_week():
     """
@@ -81,11 +99,6 @@ def input_used_per_week():
     Contains the validation funtion.
     """
     while True:
-        print('Please use the table printed in the terminal to fill the 22 rows, with a comma after the numberr. By not so, it will come with an error.')
-        print('Please have the terminal as max with as possible because it will print all the table.')
-        print('The input is below the table')
-        print("For the purpose of the project, I'll leave an example")
-        print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45')
         print(dataframe_stack)
         data_per_week = input('Enter your numbers here:\n')
         data_per_week_list = data_per_week.split(",")
@@ -121,7 +134,7 @@ def update_sheet(data,cell_target,sheet):
     """
     print(f'updating {sheet}...\n')
     cell_list = sheet.range(cell_target)
-    cell_values = data # replace this with a list of 22 values
+    cell_values = data 
 
     for i, val in enumerate(cell_values):  #gives us a tuple of an index and value
         cell_list[i].value = val    #use the index on cell_list and the val from cell_values
@@ -155,7 +168,7 @@ def collect_update_remain_sheet(column_numbers):
     Positive numbers indicates there is still food stack
     Negative numbers indicates storage is empty and extra was bought during the week.
     """
-    # numbers to mult
+    
     col_list_storage = dataframe_stack["Amount in storage"].values.tolist()# numbers to subtract
     col_list_content = dataframe_content["Content"].values.tolist()
     remain_numbers=[]
@@ -176,7 +189,7 @@ def change_int_to_float():
     """
 
     col_list_price = dataframe_stack["Price €"].values.tolist()
-    #print(dataframe_stack["Price €"].dtype)
+   
     dataframe_stack["Price €"]=dataframe_stack["Price €"].astype("float")
     quotients = []
     for number in col_list_price:
@@ -206,15 +219,21 @@ def estimate_budget(column_numbers):
 
 def main():
     """
-    This function will take all the function and start the programm,
+    This function will run  all the function, if yes was inputed.
     """
-    welcome_app()
+    clear_cell('J2:J23', stack)
+    clear_cell('G2:G23', remain)
+    clear_cell('I2:I23', budget)
     input_num = input_used_per_week()
     used_week_numbers = transform_numbers_and_clear(input_num, col_list_stack)
     remain_num = collect_update_remain_sheet(used_week_numbers)
     budget_numbers=estimate_budget(used_week_numbers)
     update_sheet(used_week_numbers, 'J2:J23',stack)
     update_sheet(remain_num,'G2:G23',remain)
-    update_sheet(budget_numbers,'J2:J23',budget)
+    update_sheet(budget_numbers,'I2:I23',budget)
+    print('You have finished.')
+    exit()
 
+
+welcome_app()
 main()
