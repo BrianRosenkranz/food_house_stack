@@ -1,34 +1,6 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
 
-Welcome BrianRosenkranz,
 
-This is the Code Institute student template for deploying your third portfolio project, the Python command-line project. The last update to this file was: **August 17, 2021**
 
-## Reminders
-
-* Your code must be placed in the `run.py` file
-* Your dependencies must be placed in the `requirements.txt` file
-* Do not edit any of the other files or your code may not deploy properly
-
-## Creating the Heroku app
-
-When you create the app, you will need to add two buildpacks from the _Settings_ tab. The ordering is as follows:
-
-1. `heroku/python`
-2. `heroku/nodejs`
-
-You must then create a _Config Var_ called `PORT`. Set this to `8000`
-
-If you have credentials, such as in the Love Sandwiches project, you must create another _Config Var_ called `CREDS` and paste the JSON into the value field.
-
-Connect your GitHub repository and deploy as normal.
-
-## Constraints
-
-The deployment terminal is set to 80 columns by 24 rows. That means that each line of text needs to be 80 characters or less otherwise it will be wrapped onto a second line.
-
------
-Happy coding!
 
 
 
@@ -40,3 +12,11 @@ bugs
 4) list inside a list after retrieving the numbers in the input and appending it to list from the sheet. sol: for in iterate. and update the columns
 5)Just updated stack, not all of them. Function to update all when called
 6) for the estimate budget the number from stock sheet was retrieve as int and when converted to float, it was just adding a ,0. The solution was changing the google sheet formats and divided wiht python by 10.
+7)Everytime there is a validation process, the instrucction and the table was printed. To fixed this a new function was created.
+8)Infinite loop with the welcome_app function. Solution. Taking the function out of main() and placing the welcome app funcion.
+9) By creating a new function to print the instruccions and the table, the table cells were not clearing. To solve i put the print table statement in the main function.
+
+
+91: E501 line too long (90 > 79 characters)
+140: E501 line too long (100 > 79 characters)
+146: E501 line too long (82 > 79 characters) because of indentation.

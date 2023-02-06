@@ -1,4 +1,4 @@
-# import pandas to work with dataframe
+# import pandas to work with dataframe and printed in the table.
 import pandas as pd
 # import gspreads to work with google sheets and API
 import gspread
@@ -21,11 +21,14 @@ consume = SHEET.worksheet("consume")
 remain = SHEET.worksheet("remain")
 budget = SHEET.worksheet("budget")
 
-# variables i am goin to need for input_used_per_week
+# variables I am going to need for input_used_per_week
+# To print the table in the terminal. 
+# Fetched from Pandas.
 dataframe_stack = pd.DataFrame(stack.get_all_records())
 col_list_stack = dataframe_stack["Used per week"].values.tolist()
 
 # variables i am goin to need for amount_remain_update
+# This will be used after the project to develop the app further.
 dataframe_content = pd.DataFrame(stack.get_all_records())
 dataframe_storage = pd.DataFrame(stack.get_all_records())
 dataframe_remain = pd.DataFrame(remain.get_all_records())
@@ -39,13 +42,13 @@ remain_list = remain.get_all_values()
 budget_list = budget.get_all_values()
 
 # the value worksheets in to dataframe with pandas
-# erase if no need at the end of the project
+# This will be used after the project to develop the app further.
 df_stack = pd.DataFrame(stack_list)
 df_consume = pd.DataFrame(consume_list)
 df_remain = pd.DataFrame(remain_list)
 df_budget = pd.DataFrame(budget_list)
 
-
+# Welcomes the app.
 def welcome_app():
     """
     This function will welcome the user.
@@ -58,7 +61,7 @@ def welcome_app():
         if start == 'yes':
             main()
         elif start == 'no':
-            print('App finished\n')
+            print('App will exit\n')
             exit()
             return False
         else:
@@ -67,7 +70,7 @@ def welcome_app():
             welcome_app()
     return start
 
-
+# Validates the input from welcome app.
 def validate_start(data):
     """
     The function is to validate input.
@@ -87,6 +90,7 @@ def validate_start(data):
     return True
 
 
+# Clear the cells.
 def clear_cell(cell_target, sheet):
     """
     The function will clear the old cells from the worksheet.
@@ -95,12 +99,11 @@ def clear_cell(cell_target, sheet):
     sheet.batch_clear([cell_target])
 
 
-def print_table():
+# Print table and instructions
+def print_instructions():
     """
-    This function is created to fix a bug.
-    Every time there was validation, printed the table. Not good
-    for user experience.
     Instructions are added for a better understanding of the app.
+    
     """
     print('Please have the terminal as max with as possible because')
     print('it will show all the table.')
@@ -108,9 +111,9 @@ def print_table():
     print('Please write 22 numbers separated by a comma.')
     print("For the purpose of the project, I'll leave an example\n")
     print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45\n')
-    print(dataframe_stack)
+    
 
-
+# Inputs the numbers
 def input_used_per_week():
     """
     While loop for the user until the input data is correct
@@ -124,7 +127,8 @@ def input_used_per_week():
             break
     return data_per_week_list
 
-
+# Validate the numbers from the input.
+# Code from Code Institute modules.
 def validate_input(data):
     """
     The function is to validate input.
@@ -147,7 +151,8 @@ def validate_input(data):
     return True
 
 
-# This coda was created together with Kevin, CI tutor.
+# This code was created together with Kevin, CI tutor.
+# Upadtes the the sheets
 def update_sheet(data, cell_target, sheet):
     """
     Function to convert our used per week in to list
@@ -164,7 +169,7 @@ def update_sheet(data, cell_target, sheet):
     sheet.update_cells(cell_list)
     print(f'{sheet} updated successfully\n')
 
-
+# Clears the list got it from the pandas.
 def transform_numbers_and_clear(value, col_list):
     """
     This function is to get all numbers from the list, erase there values
@@ -193,8 +198,6 @@ def collect_update_remain_sheet(column_numbers):
     Negative numbers indicates storage is empty and/or
     extra was bought during the week.
     """
-
-    # numbers to subtract
     col_list_storage = dataframe_stack["Amount in storage"].values.tolist()
     col_list_content = dataframe_content["Content"].values.tolist()
     remain_numbers = []
@@ -207,7 +210,7 @@ def collect_update_remain_sheet(column_numbers):
         remain_numbers.append(subtraction)
     return remain_numbers
 
-
+# Changes int64 to float
 def change_int_to_float():
     """
     All the numbers coming from the list of price is an int64.
@@ -222,7 +225,7 @@ def change_int_to_float():
         quotients.append(number / 10)
     return quotients
 
-
+# The "zip" was taken from CI modules.
 def estimate_budget(column_numbers):
     """
     Het the numbers from Google sheet
@@ -245,16 +248,17 @@ def estimate_budget(column_numbers):
         budget_numbers.append(div)
     return budget_numbers
 
-
+# Runs the app except the welcome app.
 def main():
     """
     This function will run all the function, if yes was inputed, except the
     welcome_app().
     """
-    print_table()
     clear_cell('J2:J23', stack)
     clear_cell('G2:G23', remain)
     clear_cell('I2:I23', budget)
+    print(dataframe_stack)
+    print_instructions()
     input_num = input_used_per_week()
     used_week_numbers = transform_numbers_and_clear(input_num, col_list_stack)
     remain_num = collect_update_remain_sheet(used_week_numbers)
@@ -262,9 +266,10 @@ def main():
     update_sheet(used_week_numbers, 'J2:J23', stack)
     update_sheet(remain_num, 'G2:G23', remain)
     update_sheet(budget_numbers, 'I2:I23', budget)
-    print('You have finished.')
+    print('You have finished. All sheet are up to date')
+    print('The app will exit now.')
     exit()
 
-
+# Welcome_app is here to avoid infinite loop. Bug fix
 welcome_app()
 main()
