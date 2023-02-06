@@ -51,16 +51,8 @@ def welcome_app():
     This function will welcome the user.
     Validate the data
     Or exit the app if the user decides not to continue.
-    Instructions are added for a better understanding of the app.
     """
     print('Welcome to the house food stack app\n')
-    print('The table will be printed in the terminal.')
-    print('Please have the terminal as max with as possible because')
-    print('it will show all the table.')
-    print('The input area will be below the table.\n')
-    print('Please write 22 numbers separated by a comma.')
-    print("For the purpose of the project, I'll leave an example\n")
-    print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45\n')
     start = input('Will you like to start?\n Only yes or no allowed\n')
     while True:
         if start == 'yes':
@@ -103,6 +95,22 @@ def clear_cell(cell_target, sheet):
     sheet.batch_clear([cell_target])
 
 
+def print_table():
+    """
+    This function is created to fix a bug.
+    Every time there was validation, printed the table. Not good
+    for user experience.
+    Instructions are added for a better understanding of the app.
+    """
+    print('Please have the terminal as max with as possible because')
+    print('it will show all the table.')
+    print('The input area will be below the table.\n')
+    print('Please write 22 numbers separated by a comma.')
+    print("For the purpose of the project, I'll leave an example\n")
+    print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45\n')
+    print(dataframe_stack)
+
+
 def input_used_per_week():
     """
     While loop for the user until the input data is correct
@@ -110,7 +118,6 @@ def input_used_per_week():
     Contains the validation function.
     """
     while True:
-        print(dataframe_stack)
         data_per_week = input('Enter your numbers here:\n')
         data_per_week_list = data_per_week.split(",")
         if validate_input(data_per_week_list):
@@ -244,6 +251,7 @@ def main():
     This function will run all the function, if yes was inputed, except the
     welcome_app().
     """
+    print_table()
     clear_cell('J2:J23', stack)
     clear_cell('G2:G23', remain)
     clear_cell('I2:I23', budget)
