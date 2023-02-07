@@ -17,12 +17,11 @@ GSPREAD_CLIENT = gspread.authorize(SCOPE_CREDS)
 SHEET = GSPREAD_CLIENT.open("house_food_stack")
 # get the worksheets in to variables
 stack = SHEET.worksheet("stack")
-consume = SHEET.worksheet("consume")
 remain = SHEET.worksheet("remain")
 budget = SHEET.worksheet("budget")
 
 # variables I am going to need for input_used_per_week
-# To print the table in the terminal. 
+# To print the table in the terminal.
 # Fetched from Pandas.
 dataframe_stack = pd.DataFrame(stack.get_all_records())
 col_list_stack = dataframe_stack["Used per week"].values.tolist()
@@ -32,21 +31,20 @@ col_list_stack = dataframe_stack["Used per week"].values.tolist()
 dataframe_content = pd.DataFrame(stack.get_all_records())
 dataframe_storage = pd.DataFrame(stack.get_all_records())
 dataframe_remain = pd.DataFrame(remain.get_all_records())
-
+dataframe_budget = pd.DataFrame(budget.get_all_records())
 
 # get the values from the worksheet variables.
 # create a function later on
 stack_list = stack.get_all_values()
-consume_list = consume.get_all_values()
 remain_list = remain.get_all_values()
 budget_list = budget.get_all_values()
 
 # the value worksheets in to dataframe with pandas
 # This will be used after the project to develop the app further.
 df_stack = pd.DataFrame(stack_list)
-df_consume = pd.DataFrame(consume_list)
 df_remain = pd.DataFrame(remain_list)
 df_budget = pd.DataFrame(budget_list)
+
 
 # Welcomes the app.
 def welcome_app():
@@ -56,7 +54,7 @@ def welcome_app():
     Or exit the app if the user decides not to continue.
     """
     print('Welcome to the house food stack app\n')
-    start = input('Will you like to start?\n Only yes or no allowed\n')
+    start = input('Will you like to start?\n Only yes or no allowed\n').lower()
     while True:
         if start == 'yes':
             main()
@@ -71,6 +69,8 @@ def welcome_app():
     return start
 
 # Validates the input from welcome app.
+
+
 def validate_start(data):
     """
     The function is to validate input.
@@ -103,7 +103,6 @@ def clear_cell(cell_target, sheet):
 def print_instructions():
     """
     Instructions are added for a better understanding of the app.
-    
     """
     print('Please have the terminal as max with as possible because')
     print('it will show all the table.')
@@ -111,7 +110,7 @@ def print_instructions():
     print('Please write 22 numbers separated by a comma.')
     print("For the purpose of the project, I'll leave an example\n")
     print('2,5,1,2,4,7,0,4,0,3,2,1,0,1,1,1,0,4,3,0,0,45\n')
-    
+
 
 # Inputs the numbers
 def input_used_per_week():
@@ -129,6 +128,8 @@ def input_used_per_week():
 
 # Validate the numbers from the input.
 # Code from Code Institute modules.
+
+
 def validate_input(data):
     """
     The function is to validate input.
@@ -167,7 +168,7 @@ def update_sheet(data, cell_target, sheet):
         cell_list[i].value = val
 
     sheet.update_cells(cell_list)
-    print(f'{sheet} updated successfully\n')
+
 
 # Clears the list got it from the pandas.
 def transform_numbers_and_clear(value, col_list):
@@ -211,6 +212,8 @@ def collect_update_remain_sheet(column_numbers):
     return remain_numbers
 
 # Changes int64 to float
+
+
 def change_int_to_float():
     """
     All the numbers coming from the list of price is an int64.
@@ -226,6 +229,8 @@ def change_int_to_float():
     return quotients
 
 # The "zip" was taken from CI modules.
+
+
 def estimate_budget(column_numbers):
     """
     Het the numbers from Google sheet
@@ -249,6 +254,8 @@ def estimate_budget(column_numbers):
     return budget_numbers
 
 # Runs the app except the welcome app.
+
+
 def main():
     """
     This function will run all the function, if yes was inputed, except the
@@ -266,9 +273,11 @@ def main():
     update_sheet(used_week_numbers, 'J2:J23', stack)
     update_sheet(remain_num, 'G2:G23', remain)
     update_sheet(budget_numbers, 'I2:I23', budget)
+    print('Updated successfully\n')
     print('You have finished. All sheet are up to date')
     print('The app will exit now.')
     exit()
+
 
 # Welcome_app is here to avoid infinite loop. Bug fix
 welcome_app()
