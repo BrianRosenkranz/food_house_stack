@@ -61,6 +61,8 @@
   - I placed invalid inputs to check the validation function when needed.
   - I passed the code through a PEP8 linter and confirmed no problems.
   - Used [Python tutor](https://pythontutor.com/cp/composingprograms.html#mode=edit).
+- I will leave my google sheet link to see that it is being updated.
+  - https://docs.google.com/spreadsheets/d/15OSiLLSFH3NGSYMoI_PwhjMAfwTsR5qwKMVB3a1qEx8/edit?usp=sharing
 
 ## Bugs:
 
@@ -91,6 +93,7 @@
   3. Sed the buildbacks <code> Python</code> and <code>NodeJS</code> in that order.
   4. In the Automatic deploys area, enable the automatic deployment.
   5. At the top of the web page, click the open app button.
+
 
 ## Credit.
 
